@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34003.232
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkethuntOTC", "MarkethuntOTC\MarkethuntOTC.csproj", "{EE75AE09-F3A7-4326-A084-030D3503500A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkethuntOTC.Domain", "MarkethuntOTC.Domain\MarkethuntOTC.Domain.csproj", "{9D4E33F8-0F42-41CC-9997-F4ABB42F4638}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkethuntOTC.Common", "MarkethuntOTC.Common\MarkethuntOTC.Common.csproj", "{9D8DCDC0-7DF2-4DF9-B614-A5F4443643CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkethuntOTC.Infrastructure", "MarkethuntOTC.Infrastructure\MarkethuntOTC.Infrastructure.csproj", "{EC8D61E3-5EAF-4F5F-84E9-FF78259667E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkethuntOTC.TextProcessing", "MarkethuntOTC.TextProcessing\MarkethuntOTC.TextProcessing.csproj", "{4A5BAFB8-A9E5-4D9C-8F04-AF18EB17A4BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +17,22 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{EE75AE09-F3A7-4326-A084-030D3503500A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EE75AE09-F3A7-4326-A084-030D3503500A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EE75AE09-F3A7-4326-A084-030D3503500A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EE75AE09-F3A7-4326-A084-030D3503500A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D4E33F8-0F42-41CC-9997-F4ABB42F4638}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D4E33F8-0F42-41CC-9997-F4ABB42F4638}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D4E33F8-0F42-41CC-9997-F4ABB42F4638}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D4E33F8-0F42-41CC-9997-F4ABB42F4638}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D8DCDC0-7DF2-4DF9-B614-A5F4443643CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D8DCDC0-7DF2-4DF9-B614-A5F4443643CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D8DCDC0-7DF2-4DF9-B614-A5F4443643CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D8DCDC0-7DF2-4DF9-B614-A5F4443643CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC8D61E3-5EAF-4F5F-84E9-FF78259667E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC8D61E3-5EAF-4F5F-84E9-FF78259667E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC8D61E3-5EAF-4F5F-84E9-FF78259667E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC8D61E3-5EAF-4F5F-84E9-FF78259667E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A5BAFB8-A9E5-4D9C-8F04-AF18EB17A4BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A5BAFB8-A9E5-4D9C-8F04-AF18EB17A4BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A5BAFB8-A9E5-4D9C-8F04-AF18EB17A4BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A5BAFB8-A9E5-4D9C-8F04-AF18EB17A4BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

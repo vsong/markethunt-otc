@@ -24,8 +24,6 @@ public class MaptainsSellingFillingLexer : ILexer
 
             if (startingLength == endingLength) break;
         }
-
-        yield break;
     }
 
     private bool IsSellingLeech(string input)

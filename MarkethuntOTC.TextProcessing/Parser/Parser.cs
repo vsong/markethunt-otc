@@ -7,10 +7,10 @@ using Microsoft.EntityFrameworkCore;
 namespace MarkethuntOTC.TextProcessing;
 public class Parser : IParser
 {
-    private readonly IDbContextFactory<DomainContext> _contextFactory;
+    private readonly IDomainContextFactory _contextFactory;
     static readonly Regex priceExtractionRegex = new Regex(@"^[^0-9]*([0-9]+(.[0-9]+)?|.[0-9]+).*$", RegexOptions.Compiled | RegexOptions.Singleline);
 
-    public Parser(IDbContextFactory<DomainContext> contextFactory)
+    public Parser(IDomainContextFactory contextFactory)
     {
         _contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
     }
@@ -27,7 +27,7 @@ public class Parser : IParser
 
     private (ParseRule, Match) GetMatchingRule(Token token)
     {
-        using var context = _contextFactory.CreateDbContext();
+        using var context = _contextFactory.Create();
         
         var rules = context.ParseRules.Where(x => token.GetItemCategories().Contains(x.ParseItemCategory));
         

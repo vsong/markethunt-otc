@@ -24,12 +24,12 @@ public class ParseRule : AggregateRoot<int>
     public DateTime? StartDate { get; set; }
     public DateTime? EndDate { get; set; }
 
-    public ParseRule(int itemId, string regex, ParseItemCategory parseGroup, int priority, DateTime? startDate, DateTime? endDate)
+    public ParseRule(int itemId, string regex, ParseItemCategory parseItemCategory, int priority, DateTime? startDate, DateTime? endDate)
     {
         Id = default;
         ItemId = itemId;
         Regex = regex;
-        ParseItemCategory = parseGroup;
+        ParseItemCategory = parseItemCategory;
         Priority = priority;
         StartDate = startDate;
         EndDate = endDate;

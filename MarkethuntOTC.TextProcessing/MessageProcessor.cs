@@ -4,7 +4,7 @@ using MarkethuntOTC.Domain.Roots.Listing;
 
 namespace MarkethuntOTC.TextProcessing;
 
-class MessageProcessor : IMessageProcessor
+public class MessageProcessor : IMessageProcessor
 {
     private readonly ILexerFactory _lexerFactory;
     private readonly IParser _parser;

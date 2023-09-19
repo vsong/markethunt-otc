@@ -1,21 +1,13 @@
-﻿// See https://aka.ms/new-console-template for more information
-
-// DI
-
-using System.Text.Json;
+﻿using System.Text.Json;
+using Lamar;
+using MarkethuntOTC.Agent;
 using MarkethuntOTC.Domain.Roots.DiscordMessage;
-using MarkethuntOTC.Infrastructure;
 using MarkethuntOTC.TextProcessing;
-using MarkethuntOTC.TextProcessing.Lexer;
-using Microsoft.EntityFrameworkCore;
 
-var connectionString = "server=localhost;port=8990;user=appdbuser;password=7e49cd3db4;database=markethunt";
-var optionsBuilder = new DbContextOptionsBuilder<DomainContext>();
-optionsBuilder.UseMySql(connectionString, new MariaDbServerVersion(new Version(10, 5, 0)));
+var registry = new ApplicationRegistry();
+var container = new Container(registry);
 
-var lexerFactory = new LexerFactory();
-var parser = new Parser(new DomainContextFactory(optionsBuilder.Options));
-var textProcessor = new MessageProcessor(lexerFactory, parser);
+var textProcessor = container.GetInstance<IMessageProcessor>();
 
 var listings = textProcessor.ExtractListings(new Message(0, ChannelType.SellMapsChests, "S> Fresh ESP 450\nS> Unopened BB 20", new DateTime()));
 

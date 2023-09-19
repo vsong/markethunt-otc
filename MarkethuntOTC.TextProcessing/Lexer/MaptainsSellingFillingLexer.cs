@@ -37,7 +37,7 @@ public class MaptainsSellingFillingLexer : ILexer
 
     private class FreshMapTokenizer
     {
-        public static bool Eat(string input, out string? consumed, out string remaining)
+        public static bool Eat(string input, out string consumed, out string remaining)
         {
             consumed = null;
             remaining = input;

@@ -1,10 +1,20 @@
 ﻿using System.Text.Json;
 using Lamar;
 using MarkethuntOTC.Agent;
+using MarkethuntOTC.Agent.Configuration;
 using MarkethuntOTC.Domain.Roots.DiscordMessage;
 using MarkethuntOTC.TextProcessing;
+using Microsoft.Extensions.Configuration;
 
-var registry = new ApplicationRegistry();
+var configuration = new ConfigurationBuilder()
+    .AddJsonFile("appSettings.json")
+    .Build();
+    
+var databaseConnectionOptions = configuration
+    .GetRequiredSection("connectionStrings")
+    .Get<DatabaseConnectionOptions>(x => x.BindNonPublicProperties = true);
+
+var registry = new ApplicationRegistry(databaseConnectionOptions!);
 var container = new Container(registry);
 
 var textProcessor = container.GetInstance<IMessageProcessor>();

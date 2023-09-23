@@ -1,16 +1,8 @@
-﻿using System.Text.Json;
-using Discord;
-using Discord.WebSocket;
-using Lamar;
+﻿using Lamar;
 using MarkethuntOTC.Agent;
 using MarkethuntOTC.ApplicationServices;
-using MarkethuntOTC.ApplicationServices.Discord;
 using MarkethuntOTC.DataTransferObjects.Configuration;
-using MarkethuntOTC.Domain.Roots.DiscordMessage;
-using MarkethuntOTC.TextProcessing;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using ChannelType = MarkethuntOTC.Domain.Roots.DiscordMessage.ChannelType;
 
 #region Config options setup
 var configuration = new ConfigurationBuilder()

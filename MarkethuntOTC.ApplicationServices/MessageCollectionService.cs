@@ -1,5 +1,4 @@
 using System.Timers;
-using MarkethuntOTC.ApplicationServices.Discord;
 using MarkethuntOTC.Domain.Roots.DiscordMessage;
 using MarkethuntOTC.Infrastructure;
 using Microsoft.EntityFrameworkCore;

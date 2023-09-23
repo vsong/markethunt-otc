@@ -1,5 +1,4 @@
 using MarkethuntOTC.Domain.Roots.Item;
-using MarkethuntOTC.Domain.Roots.ParseRule;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

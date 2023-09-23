@@ -1,6 +1,5 @@
 using Discord;
 using Discord.WebSocket;
-using MarkethuntOTC.DataTransferObjects.Configuration;
 
 namespace MarkethuntOTC.ApplicationServices.Discord;
 

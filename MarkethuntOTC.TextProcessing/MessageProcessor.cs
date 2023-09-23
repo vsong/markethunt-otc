@@ -1,6 +1,4 @@
-using System.Text.Json;
 using MarkethuntOTC.Domain.Roots.DiscordMessage;
-using MarkethuntOTC.Domain.Roots.Listing;
 
 namespace MarkethuntOTC.TextProcessing;
 

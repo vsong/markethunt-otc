@@ -2,7 +2,6 @@
 using MarkethuntOTC.Domain.Roots.ParseRule;
 using MarkethuntOTC.Infrastructure;
 using MarkethuntOTC.TextProcessing.Tokens;
-using Microsoft.EntityFrameworkCore;
 
 namespace MarkethuntOTC.TextProcessing;
 public class Parser : IParser

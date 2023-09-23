@@ -3,17 +3,11 @@
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
     </PropertyGroup>
 
-    <ItemGroup>
-      <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0" />
-    </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\MarkethuntOTC.DataTransferObjects\MarkethuntOTC.DataTransferObjects.csproj" />
       <ProjectReference Include="..\MarkethuntOTC.Domain\MarkethuntOTC.Domain.csproj" />
     </ItemGroup>
-
 
 </Project>

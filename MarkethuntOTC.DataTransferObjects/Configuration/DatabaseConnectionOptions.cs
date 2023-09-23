@@ -1,4 +1,4 @@
-namespace MarkethuntOTC.Agent.Configuration;
+namespace MarkethuntOTC.DataTransferObjects.Configuration;
 
 public class DatabaseConnectionOptions
 {

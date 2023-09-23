@@ -3,6 +3,8 @@
 namespace MarkethuntOTC.TextProcessing.Lexer;
 public class MaptainsSellingFillingLexer : ILexer
 {
+    // TODO filter out buying leech
+    
     public IEnumerable<Token> Tokenize(string input)
     {
         if (IsSellingLeech(input))

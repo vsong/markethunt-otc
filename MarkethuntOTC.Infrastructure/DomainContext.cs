@@ -1,3 +1,4 @@
+using MarkethuntOTC.DataTransferObjects.Agent;
 using MarkethuntOTC.Domain.Roots.DiscordMessage;
 using MarkethuntOTC.Domain.Roots.Item;
 using MarkethuntOTC.Domain.Roots.Listing;
@@ -17,6 +18,7 @@ public class DomainContext : DbContext
     public DbSet<Item> Items => Set<Item>();
     public DbSet<Listing> Listings => Set<Listing>();
     public DbSet<ParseRule> ParseRules => Set<ParseRule>();
+    public DbSet<ChannelState> ChannelStates => Set<ChannelState>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

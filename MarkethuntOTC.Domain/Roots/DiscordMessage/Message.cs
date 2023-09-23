@@ -4,15 +4,17 @@ public class Message : AggregateRoot<ulong>
 {
     private string _text;
 
-    public Message(ulong id, ChannelType originatingChannelType, string text, DateTime createdOn)
+    public Message(ulong id, ChannelType originatingChannelType, ulong? originationChannelId, string text, DateTime createdOn)
     {
         Id = id;
         OriginatingChannelType = originatingChannelType;
+        OriginationChannelId = originationChannelId;
         Text = text;
         CreatedOn = createdOn;
     }
 
     public ChannelType OriginatingChannelType { get; set; }
+    public ulong? OriginationChannelId { get; private set; }
 
     public string Text
     {
@@ -20,5 +22,5 @@ public class Message : AggregateRoot<ulong>
         set => _text = value ?? throw new ArgumentNullException(nameof(Text));
     }
     
-    public DateTime CreatedOn { get; set; }
+    public DateTime CreatedOn { get; private set; }
 }

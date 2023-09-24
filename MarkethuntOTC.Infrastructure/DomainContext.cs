@@ -17,7 +17,7 @@ public class DomainContext : DbContext
     public DbSet<Message> Messages => Set<Message>();
     public DbSet<Item> Items => Set<Item>();
     public DbSet<Listing> Listings => Set<Listing>();
-    public DbSet<ParseRule> ParseRules => Set<ParseRule>();
+    internal DbSet<ParseRule> ParseRules => Set<ParseRule>();
     public DbSet<ChannelState> ChannelStates => Set<ChannelState>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

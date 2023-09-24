@@ -2,6 +2,7 @@
 using log4net;
 using MarkethuntOTC.Domain.Roots.ParseRule;
 using MarkethuntOTC.Infrastructure;
+using MarkethuntOTC.Infrastructure.DataServices;
 using MarkethuntOTC.TextProcessing.Tokens;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,12 +11,15 @@ namespace MarkethuntOTC.TextProcessing.Parser;
 public class Parser : IParser
 {
     private readonly IDomainContextFactory _contextFactory;
+    private readonly IParseRuleRepository _parseRuleRepository;
+    
     private static readonly Regex PriceExtractionRegex = new Regex(@"^[^0-9]*([0-9]+(\.[0-9]+)?|\.[0-9]+).*$", RegexOptions.Compiled | RegexOptions.Singleline);
     private static readonly ILog Log = LogManager.GetLogger(typeof(Parser));
     
-    public Parser(IDomainContextFactory contextFactory)
+    public Parser(IDomainContextFactory contextFactory, IParseRuleRepository parseRuleRepository)
     {
         _contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
+        _parseRuleRepository = parseRuleRepository ?? throw new ArgumentNullException(nameof(parseRuleRepository));
     }
 
     public ParseResult Parse(Token token)
@@ -35,12 +39,9 @@ public class Parser : IParser
     {
         using var db = _contextFactory.Create();
 
-        var itemCategories = token.GetItemCategories().ToList();
-        
-        var rules = db.ParseRules
-            .AsNoTracking()
-            .Where(x => itemCategories.Contains(x.ParseItemCategory))
-            .OrderBy(x => x.Priority);
+        var itemCategories = token.GetItemCategories();
+
+        var rules = _parseRuleRepository.Get(itemCategories).ToList();
         
         ParseRule matchedRule = null;
         Match regexMatch = null;

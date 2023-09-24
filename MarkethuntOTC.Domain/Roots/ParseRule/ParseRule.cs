@@ -6,6 +6,7 @@ namespace MarkethuntOTC.Domain.Roots.ParseRule;
 public class ParseRule : AggregateRoot<int>
 {
     private string _regex;
+    private Regex _compiledRegexCache = null;
     
     public int ItemId { get; private set; }
 
@@ -37,7 +38,9 @@ public class ParseRule : AggregateRoot<int>
 
     public Regex GetCompiledRegex()
     {
-        // TODO implement cache (requires repository pattern)
-        return new Regex(Regex);
+        if (_compiledRegexCache != null) return _compiledRegexCache;
+
+        _compiledRegexCache = new Regex(Regex, RegexOptions.Compiled);
+        return _compiledRegexCache;
     }
 }

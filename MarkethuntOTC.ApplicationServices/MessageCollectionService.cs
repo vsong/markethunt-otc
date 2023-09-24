@@ -1,4 +1,7 @@
+using System.Collections;
 using System.Timers;
+using Discord;
+using Discord.Net;
 using log4net;
 using MarkethuntOTC.DataTransferObjects.Events;
 using MarkethuntOTC.Domain.Roots.DiscordMessage;
@@ -47,13 +50,24 @@ public class MessageCollectionService : IMessageCollectionService
         foreach (var channelState in await db.ChannelStates.ToListAsync())
         {
             Log.Info($"Collect messages from channel {channelState.ChannelId}, latest message: {channelState.LatestMessageId}");
-            var messages = (await _discordService.GetChannelMessagesAsync(
-                channelState.ServerId,
-                channelState.ChannelId,
-                channelState.LatestMessageId ?? channelState.StartingFromMessageId,
-                _ignoreMessagesNewerThan,
-                MaxMessageCollectionSize))
-                .ToList();
+
+            IList<IMessage> messages;
+
+            try
+            {
+                messages = (await _discordService.GetChannelMessagesAsync(
+                        channelState.ServerId,
+                        channelState.ChannelId,
+                        channelState.LatestMessageId ?? channelState.StartingFromMessageId,
+                        _ignoreMessagesNewerThan,
+                        MaxMessageCollectionSize))
+                    .ToList();
+            }
+            catch (Exception ex) when (ex is HttpException or TimeoutException)
+            {
+                Log.Error("Failed to fetch messages", ex);
+                return;
+            }
 
             var messageIds = messages.Select(x => x.Id);
             var existingMessageIds = await db.Messages

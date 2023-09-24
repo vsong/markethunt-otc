@@ -65,34 +65,31 @@ public class MessageProcessingEventHandler : IMessageProcessingEventHandler
                 .ToListAsync(cancellationToken);
 
             await db.Listings.Where(x => messageIdBatch.Contains(x.MessageId)).ExecuteDeleteAsync(cancellationToken);
-            await ProcessMessages(messages, db, cancellationToken, false);
+            await ProcessMessages(messages, db, cancellationToken);
         }
 
+        Log.Info("Finished reprocessing messages");
         Lock.Release();
     }
 
-    private async Task ProcessMessages(IEnumerable<Message> messages, DomainContext db, CancellationToken cancellationToken, bool enableLogging = true)
+    private async Task ProcessMessages(IEnumerable<Message> messages, DomainContext db, CancellationToken cancellationToken)
     {
-        foreach (var message in messages)
-        {
-            if (enableLogging) Log.Debug($"Processing message {message.Id}");
-            
-            var listings = _messageProcessor
-                .ExtractListings(message)
-                .Select(x => new Listing(
-                    x.MatchedParseRule.ItemId,
-                    x.SbPrice,
-                    x.ListingType,
-                    x.IsSelling,
-                    x.Amount,
-                    message.Id,
-                    x.MatchedParseRule.Id))
-                .ToList();
-
-            if (!listings.Any()) continue;
+        var listings =
+            (from results in _messageProcessor.ExtractListings(messages)
+            from parseResult in results.Results
+            select new Listing(
+                parseResult.MatchedParseRule.ItemId,
+                parseResult.SbPrice,
+                parseResult.ListingType,
+                parseResult.IsSelling,
+                parseResult.Amount,
+                results.Message.Id,
+                parseResult.MatchedParseRule.Id))
+            .ToList();
+        
+        if (!listings.Any()) return;
                 
-            await db.Listings.AddRangeAsync(listings, cancellationToken);
-            await db.SaveChangesAsync(cancellationToken);
-        }
+        await db.Listings.AddRangeAsync(listings, cancellationToken);
+        await db.SaveChangesAsync(cancellationToken);
     }
 }

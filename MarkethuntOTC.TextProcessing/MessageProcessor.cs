@@ -20,10 +20,21 @@ public class MessageProcessor : IMessageProcessor
     /// <returns>List of successful ParseResults</returns>
     public IEnumerable<ParseResult> ExtractListings(Message message)
     {
-        var lexer = _lexerFactory.Create(message.OriginatingChannelType);
-        
-        var tokens = lexer.Tokenize(message.Text);
+        return ExtractListings(new[] { message }).First().Results;
+    }
 
-        return tokens.Select(_parser.Parse).Where(x => x.Successful);
+    /// <summary>
+    /// Batch version of <see cref="ExtractListings(Message)"/>
+    /// </summary>
+    public IEnumerable<(Message Message, IEnumerable<ParseResult> Results)> ExtractListings(IEnumerable<Message> messages)
+    {
+        foreach (var message in messages)
+        {
+            var lexer = _lexerFactory.Create(message.OriginatingChannelType);
+        
+            var tokens = lexer.Tokenize(message.Text);
+
+            yield return (message, tokens.Select(_parser.Parse).Where(x => x.Successful));
+        }
     }
 }

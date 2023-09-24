@@ -3,6 +3,7 @@ using MarkethuntOTC.ApplicationServices;
 using MarkethuntOTC.ApplicationServices.Discord;
 using MarkethuntOTC.DataTransferObjects.Configuration;
 using MarkethuntOTC.Infrastructure;
+using MarkethuntOTC.Infrastructure.DataServices;
 using MarkethuntOTC.TextProcessing;
 using MarkethuntOTC.TextProcessing.Lexer;
 using MediatR;
@@ -41,5 +42,7 @@ public class ApplicationRegistry : ServiceRegistry
 
         ForSingletonOf<DbContextOptions<DomainContext>>().Use(optionsBuilder.Options);
         ForSingletonOf<IDomainContextFactory>().Use<DomainContextFactory>();
+
+        ForSingletonOf<IParseRuleRepository>().Use<ParseRuleRepository>();
     }
 }

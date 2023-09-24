@@ -24,9 +24,9 @@ public class MessageProcessingEventHandler : IMessageProcessingEventHandler
 
     public async Task Handle(MessagesCollectedEvent notification, CancellationToken cancellationToken)
     {
+        await Lock.WaitAsync(cancellationToken);
         Log.Info($"Processing {notification.MessageIds.Count} messages");
         
-        await Lock.WaitAsync(cancellationToken);
         await using var db = _domainContextFactory.Create();
 
         foreach (var messageIdBatch in notification.MessageIds.Chunk(1000))

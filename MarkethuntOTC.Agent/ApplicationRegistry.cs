@@ -26,13 +26,13 @@ public class ApplicationRegistry : ServiceRegistry
 
         ForSingletonOf<IMediator>().Use(x => new Mediator(x));
 
-        ForSingletonOf<IDiscordService>().Use(_ => new DiscordService(discordBotOptions.Token));
+        ForSingletonOf<IDiscordService>().Use(_ => new DiscordService(discordBotOptions.Token, discordBotOptions.AdminUserId));
         ForSingletonOf<IMessageCollectionService>().Use(x => new MessageCollectionService(
             x.GetInstance<IDiscordService>(),
             discordBotOptions.MessageCollectionInterval,
             x.GetInstance<IDomainContextFactory>(),
             x.GetInstance<IMediator>()));
-        
+        ForSingletonOf<IAgentCommandService>().Use<AgentCommandService>();
 
         ForSingletonOf<ILexerFactory>().Use<LexerFactory>();
         

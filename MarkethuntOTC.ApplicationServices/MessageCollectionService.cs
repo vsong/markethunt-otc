@@ -77,8 +77,8 @@ public class MessageCollectionService : IMessageCollectionService
 
             if (newMessagesToInsert.Any())
             {
-                await _messageBus.Publish(
-                    new MessagesCollectedEvent(Guid.NewGuid(), 
+                await _messageBus.Publish(new MessagesCollectedEvent(
+                    Guid.NewGuid(), 
                     newMessagesToInsert.Select(x => x.Id).ToList()));
             }
         }

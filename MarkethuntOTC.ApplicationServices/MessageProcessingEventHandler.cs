@@ -1,4 +1,5 @@
 using log4net;
+using MarkethuntOTC.Common.Extensions;
 using MarkethuntOTC.DataTransferObjects.Events;
 using MarkethuntOTC.Domain.Roots.DiscordMessage;
 using MarkethuntOTC.Domain.Roots.Listing;
@@ -41,8 +42,11 @@ public class MessageProcessingEventHandler : IMessageProcessingEventHandler
 
     public async Task Handle(ReprocessMessagesRequestedEvent notification, CancellationToken cancellationToken)
     {
+        const int chunkSize = 1000;
+        
         await Lock.WaitAsync(cancellationToken);
         await using var db = _domainContextFactory.Create();
+        Log.Info($"Reprocessing all messages of type {notification.ChannelType} with chunk size {chunkSize}");
 
         var messageIdsToReprocess = await db.Messages
             .AsNoTracking()
@@ -50,8 +54,11 @@ public class MessageProcessingEventHandler : IMessageProcessingEventHandler
             .Select(x => x.Id)
             .ToListAsync(cancellationToken);
 
-        foreach (var messageIdBatch in messageIdsToReprocess.Chunk(1000))
+        var numChunks = Math.Ceiling((double)messageIdsToReprocess.Count / chunkSize);
+
+        foreach (var (messageIdBatch, chunkIndex) in messageIdsToReprocess.Chunk(chunkSize).WithIndex())
         {
+            Log.Debug($"Reprocessing chunk #{chunkIndex + 1} of {numChunks}");
             var messages = await db.Messages
                 .AsNoTracking()
                 .Where(x => messageIdBatch.Contains(x.Id))

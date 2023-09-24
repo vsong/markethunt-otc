@@ -8,6 +8,8 @@ public interface IDiscordService
     
     Task StopAsync();
 
+    event EventHandler<IEnumerable<string>> CommandReceived;
+
     Task<IEnumerable<IMessage>> GetChannelMessagesAsync(
         ulong serverId, 
         ulong channelId, 

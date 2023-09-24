@@ -26,6 +26,9 @@ var registry = new ApplicationRegistry(databaseConnectionOptions, discordBotOpti
 var container = new Container(registry);
 #endregion
 
+#region Start services
 container.GetInstance<IMessageCollectionService>();
+container.GetInstance<IAgentCommandService>();
+#endregion
 
 Console.ReadKey();

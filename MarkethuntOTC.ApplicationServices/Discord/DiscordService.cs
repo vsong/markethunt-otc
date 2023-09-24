@@ -6,18 +6,21 @@ namespace MarkethuntOTC.ApplicationServices.Discord;
 
 public class DiscordService : IDiscordService
 {
+    private readonly ulong _adminUserId;
     private readonly DiscordSocketClient _client;
     private static readonly ILog Log = LogManager.GetLogger(typeof(DiscordService));
 
     public bool IsReady { get; private set; }
     
-    public DiscordService(string token)
+    public DiscordService(string token, ulong adminUserId)
     {
+        _adminUserId = adminUserId;
         _client = new DiscordSocketClient();
         _client.Log += OnClientLog;
+        _client.MessageReceived += OnMessageReceived;
         _ = StartAsync(token);
     }
-    
+
     private Task OnClientLog(LogMessage message)
     {
         switch (message.Severity)
@@ -72,6 +75,8 @@ public class DiscordService : IDiscordService
         IsReady = false;
     }
 
+    public event EventHandler<IEnumerable<string>> CommandReceived;
+
     public async Task<IEnumerable<IMessage>> GetChannelMessagesAsync(
         ulong serverId,
         ulong channelId,
@@ -103,5 +108,17 @@ public class DiscordService : IDiscordService
         }
 
         return messages.DistinctBy(x => x.Id);
+    }
+    
+    private Task OnMessageReceived(SocketMessage message)
+    {
+        if (message.Author.Id != _adminUserId || !message.Content.StartsWith("otc")) return Task.CompletedTask;
+
+        var args = message.Content.Split(' ', StringSplitOptions.RemoveEmptyEntries).Skip(1).ToList();
+        
+        Log.Info("Admin command received: " + message.Content);
+        CommandReceived?.Invoke(null, args);
+
+        return Task.CompletedTask;
     }
 }

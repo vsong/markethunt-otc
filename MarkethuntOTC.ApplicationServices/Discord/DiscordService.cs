@@ -1,24 +1,46 @@
 using Discord;
 using Discord.WebSocket;
+using log4net;
 
 namespace MarkethuntOTC.ApplicationServices.Discord;
 
 public class DiscordService : IDiscordService
 {
     private readonly DiscordSocketClient _client;
+    private static readonly ILog Log = LogManager.GetLogger(typeof(DiscordService));
 
     public bool IsReady { get; private set; }
     
     public DiscordService(string token)
     {
         _client = new DiscordSocketClient();
-        _client.Log += Log;
+        _client.Log += OnClientLog;
         _ = StartAsync(token);
     }
     
-    private static Task Log(LogMessage message)
+    private Task OnClientLog(LogMessage message)
     {
-        Console.WriteLine(message);
+        switch (message.Severity)
+        {
+            case LogSeverity.Verbose:
+                break;
+            case LogSeverity.Debug:
+                Log.Debug(message);
+                break;
+            case LogSeverity.Info:
+                Log.Info(message);
+                break;
+            case LogSeverity.Warning:
+                Log.Warn(message);
+                break;
+            case LogSeverity.Error:
+                Log.Error(message, message.Exception);
+                break;
+            case LogSeverity.Critical:
+                Log.Fatal(message, message.Exception);
+                break;
+        }
+        
         return Task.CompletedTask;
     }
     

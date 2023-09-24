@@ -1,4 +1,5 @@
 ﻿using Lamar;
+using log4net.Config;
 using MarkethuntOTC.Agent;
 using MarkethuntOTC.ApplicationServices;
 using MarkethuntOTC.DataTransferObjects.Configuration;
@@ -17,6 +18,8 @@ var discordBotOptions = configuration
     .GetRequiredSection(nameof(DiscordBotOptions))
     .Get<DiscordBotOptions>(x => x.BindNonPublicProperties = true)!;
 #endregion
+
+XmlConfigurator.Configure(new FileInfo("log4net.config"));
 
 #region Container setup
 var registry = new ApplicationRegistry(databaseConnectionOptions, discordBotOptions);

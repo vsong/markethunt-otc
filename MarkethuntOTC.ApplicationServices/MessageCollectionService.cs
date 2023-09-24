@@ -1,4 +1,5 @@
 using System.Timers;
+using log4net;
 using MarkethuntOTC.DataTransferObjects.Events;
 using MarkethuntOTC.Domain.Roots.DiscordMessage;
 using MarkethuntOTC.Infrastructure;
@@ -16,6 +17,8 @@ public class MessageCollectionService : IMessageCollectionService
     private readonly IMediator _messageBus;
     private readonly Timer _messageCollectionTimer;
     private readonly TimeSpan _ignoreMessagesNewerThan = TimeSpan.FromSeconds(30);
+    
+    private static readonly ILog Log = LogManager.GetLogger(typeof(MessageCollectionService));
 
     private const int MaxMessageCollectionSize = 1000;
 
@@ -37,11 +40,13 @@ public class MessageCollectionService : IMessageCollectionService
     private async void CollectMessages(object o, ElapsedEventArgs e)
     {
         _messageCollectionTimer.Enabled = false;
+        Log.Info("Begin message collection");
 
         await using var db = _domainContextFactory.Create();
 
         foreach (var channelState in await db.ChannelStates.ToListAsync())
         {
+            Log.Info($"Collect messages from channel {channelState.ChannelId}, latest message: {channelState.LatestMessageId}");
             var messages = (await _discordService.GetChannelMessagesAsync(
                 channelState.ServerId,
                 channelState.ChannelId,
@@ -60,6 +65,7 @@ public class MessageCollectionService : IMessageCollectionService
                 where !existingMessageIds.Contains(m.Id) 
                 select Message.Create(m.Id, channelState.ChannelType, channelState.ChannelId, m.Content, m.Timestamp.DateTime))
                 .ToList();
+            Log.Info($"Collected {newMessagesToInsert.Count} new messages");
 
             if (newMessagesToInsert.Any())
             {
@@ -68,7 +74,6 @@ public class MessageCollectionService : IMessageCollectionService
             }
 
             await db.SaveChangesAsync();
-            Console.WriteLine($"Collected {newMessagesToInsert.Count} new messages");
 
             if (newMessagesToInsert.Any())
             {
@@ -78,6 +83,7 @@ public class MessageCollectionService : IMessageCollectionService
             }
         }
         
+        Log.Info("Finish message collection");
         _messageCollectionTimer.Enabled = true;
     }
 }

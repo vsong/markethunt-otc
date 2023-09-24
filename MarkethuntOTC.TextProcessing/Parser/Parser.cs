@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using log4net;
 using MarkethuntOTC.Domain.Roots.ParseRule;
 using MarkethuntOTC.Infrastructure;
 using MarkethuntOTC.TextProcessing.Tokens;
@@ -9,8 +10,9 @@ namespace MarkethuntOTC.TextProcessing.Parser;
 public class Parser : IParser
 {
     private readonly IDomainContextFactory _contextFactory;
-    static readonly Regex PriceExtractionRegex = new Regex(@"^[^0-9]*([0-9]+(\.[0-9]+)?|\.[0-9]+).*$", RegexOptions.Compiled | RegexOptions.Singleline);
-
+    private static readonly Regex PriceExtractionRegex = new Regex(@"^[^0-9]*([0-9]+(\.[0-9]+)?|\.[0-9]+).*$", RegexOptions.Compiled | RegexOptions.Singleline);
+    private static readonly ILog Log = LogManager.GetLogger(typeof(Parser));
+    
     public Parser(IDomainContextFactory contextFactory)
     {
         _contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
@@ -75,8 +77,11 @@ public class Parser : IParser
         var (matchedRule, _) = GetMatchingRule(leechToken);
         if (matchedRule == null) return ParseResult.CreateUnsuccessful();
 
-        // TODO log this
-        if (!TryGetLeechSellPrice(leechToken.Text, out var price)) return ParseResult.CreateUnsuccessful();
+        if (!TryGetLeechSellPrice(leechToken.Text, out var price))
+        {
+            Log.Debug($"Matched rule {matchedRule.Regex} but unable to find leech price");
+            return ParseResult.CreateUnsuccessful();
+        }
 
         return ParseResult.CreateSuccessful(matchedRule, leechToken.GetListingType(), leechToken.IsSelling, price, null);
     }

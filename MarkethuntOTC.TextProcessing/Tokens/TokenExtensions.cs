@@ -5,7 +5,7 @@ namespace MarkethuntOTC.TextProcessing.Tokens;
 
 public static class TokenExtensions
 {
-    private static readonly IReadOnlyDictionary<Type, IEnumerable<ParseItemCategory>> _categoryMap = new Dictionary<Type, IEnumerable<ParseItemCategory>>
+    private static readonly IReadOnlyDictionary<Type, IEnumerable<ParseItemCategory>> CategoryMap = new Dictionary<Type, IEnumerable<ParseItemCategory>>
     {
         {typeof(UnopenedMapToken), new HashSet<ParseItemCategory> { ParseItemCategory.ScrollCase, ParseItemCategory.TreasureChest } },
         {typeof(FreshMapToken), new HashSet<ParseItemCategory> { ParseItemCategory.ScrollCase, ParseItemCategory.TreasureChest } },
@@ -16,7 +16,7 @@ public static class TokenExtensions
 
     public static IEnumerable<ParseItemCategory> GetItemCategories(this Token token)
     {
-        return _categoryMap[token.GetType()];
+        return CategoryMap[token.GetType()];
     }
 
     public static ListingType GetListingType(this Token token)

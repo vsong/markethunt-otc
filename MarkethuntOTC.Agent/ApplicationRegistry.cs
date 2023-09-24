@@ -1,5 +1,4 @@
 using Lamar;
-using Lamar.IoC.Diagnostics;
 using MarkethuntOTC.ApplicationServices;
 using MarkethuntOTC.ApplicationServices.Discord;
 using MarkethuntOTC.DataTransferObjects.Configuration;

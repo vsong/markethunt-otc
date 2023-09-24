@@ -13,5 +13,5 @@ public interface IDiscordService
         ulong channelId, 
         ulong from, 
         TimeSpan excludeNewerThan = default,
-        int messageLimit = 5000);
+        int messageLimit = 100);
 }

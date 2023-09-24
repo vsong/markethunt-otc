@@ -1,7 +1,7 @@
 ﻿using MarkethuntOTC.Domain.Roots.Listing;
 using MarkethuntOTC.Domain.Roots.ParseRule;
 
-namespace MarkethuntOTC.TextProcessing;
+namespace MarkethuntOTC.TextProcessing.Parser;
 public class ParseResult
 {
     public bool Successful { get; }

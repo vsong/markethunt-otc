@@ -37,6 +37,7 @@ public class ParseRule : AggregateRoot<int>
 
     public Regex GetCompiledRegex()
     {
-        return new Regex(Regex, RegexOptions.IgnoreCase);
+        // TODO implement cache (requires repository pattern)
+        return new Regex(Regex);
     }
 }

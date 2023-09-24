@@ -3,10 +3,13 @@
 namespace MarkethuntOTC.TextProcessing.Lexer;
 public class MaptainsSellingFillingLexer : ILexer
 {
-    // TODO filter out buying leech
-    
     public IEnumerable<Token> Tokenize(string input)
     {
+        if (IsBuyingLeech(input))
+        {
+            yield break;
+        }
+        
         if (IsSellingLeech(input))
         {
             yield return new LeechToken(true, input);
@@ -26,6 +29,11 @@ public class MaptainsSellingFillingLexer : ILexer
 
             if (startingLength == endingLength) break;
         }
+    }
+
+    private bool IsBuyingLeech(string input)
+    {
+        return input.Contains("leeching");
     }
 
     private bool IsSellingLeech(string input)
@@ -49,7 +57,7 @@ public class MaptainsSellingFillingLexer : ILexer
             var index = normalizedInput.IndexOf("fresh", StringComparison.InvariantCulture);
             if (index < 0) return false;
 
-            var nextNewLine = normalizedInput.IndexOf("\n", StringComparison.InvariantCulture);
+            var nextNewLine = normalizedInput.IndexOf("\n", index, StringComparison.InvariantCulture);
             var consumeTo = nextNewLine > 0 ? nextNewLine : normalizedInput.Length;
 
             consumed = normalizedInput[index..consumeTo];

@@ -13,7 +13,7 @@ public class DiscordService : IDiscordService
     {
         _client = new DiscordSocketClient();
         _client.Log += Log;
-        StartAsync(token);
+        _ = StartAsync(token);
     }
     
     private static Task Log(LogMessage message)
@@ -55,7 +55,7 @@ public class DiscordService : IDiscordService
         ulong channelId,
         ulong from,
         TimeSpan excludeNewerThan = default,
-        int messageLimit = 5000)
+        int messageLimit = 100)
     {
         var messages = new List<IMessage>();
         var to = DateTime.UtcNow - excludeNewerThan;

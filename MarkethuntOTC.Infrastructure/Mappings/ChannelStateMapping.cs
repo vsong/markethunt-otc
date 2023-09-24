@@ -13,6 +13,7 @@ public class ChannelStateMapping : IEntityTypeConfiguration<ChannelState>
         builder.Property(x => x.ChannelId).HasColumnName("channel_id");
         builder.Property(x => x.ServerId).HasColumnName("server_id");
         builder.Property(x => x.ChannelType).HasColumnName("channel_type");
+        builder.Property(x => x.StartingFromMessageId).HasColumnName("starting_from_message_id");
         builder.Property(x => x.LatestMessageId).HasColumnName("latest_message_id");
     }
 }

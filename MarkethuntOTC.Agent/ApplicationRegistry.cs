@@ -44,5 +44,6 @@ public class ApplicationRegistry : ServiceRegistry
         ForSingletonOf<IDomainContextFactory>().Use<DomainContextFactory>();
 
         ForSingletonOf<IParseRuleRepository>().Use<ParseRuleRepository>();
+        ForSingletonOf<IDailyValueRepository>().Use<DailyValueRepository>();
     }
 }

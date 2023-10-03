@@ -3,6 +3,7 @@ using log4net.Config;
 using MarkethuntOTC.Agent;
 using MarkethuntOTC.ApplicationServices;
 using MarkethuntOTC.DataTransferObjects.Configuration;
+using MarkethuntOTC.Infrastructure.DataServices;
 using Microsoft.Extensions.Configuration;
 
 #region Config options setup

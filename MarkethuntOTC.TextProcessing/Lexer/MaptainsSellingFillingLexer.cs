@@ -20,11 +20,11 @@ public class MaptainsSellingFillingLexer : ILexer
         {
             var startingLength = input.Length;
 
-            if (FreshMapTokenizer.Eat(input, out var tokenString, out input))
+            if (UnopenedMapTokenizer.Eat(input, out var unopenedTokenString, out input))
             {
-                yield return new FreshMapToken(true, tokenString);
+                yield return new UnopenedMapToken(true, unopenedTokenString);
             }
-
+            
             var endingLength = input.Length;
 
             if (startingLength == endingLength) break;
@@ -44,24 +44,22 @@ public class MaptainsSellingFillingLexer : ILexer
 
         return false;
     }
-
-    private class FreshMapTokenizer
+    
+    private class UnopenedMapTokenizer
     {
         public static bool Eat(string input, out string consumed, out string remaining)
         {
             consumed = null;
             remaining = input;
 
-            var normalizedInput = input.ToLowerInvariant();
-
-            var index = normalizedInput.IndexOf("fresh", StringComparison.InvariantCulture);
+            var index = input.IndexOf("unopened", StringComparison.InvariantCulture);
             if (index < 0) return false;
 
-            var nextNewLine = normalizedInput.IndexOf("\n", index, StringComparison.InvariantCulture);
-            var consumeTo = nextNewLine > 0 ? nextNewLine : normalizedInput.Length;
+            var nextNewLine = input.IndexOf("\n", index, StringComparison.InvariantCulture);
+            var consumeTo = nextNewLine > 0 ? nextNewLine : input.Length;
 
-            consumed = normalizedInput[index..consumeTo];
-            remaining = normalizedInput.Substring(consumeTo);
+            consumed = input[index..consumeTo];
+            remaining = input[consumeTo..];
 
             return true;
         }

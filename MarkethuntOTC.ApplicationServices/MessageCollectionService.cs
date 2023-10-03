@@ -63,10 +63,10 @@ public class MessageCollectionService : IMessageCollectionService
                         MaxMessageCollectionSize))
                     .ToList();
             }
-            catch (Exception ex) when (ex is HttpException or TimeoutException)
+            catch (Exception ex) when (ex is HttpException or HttpRequestException or TimeoutException)
             {
                 Log.Error("Failed to fetch messages", ex);
-                return;
+                continue;
             }
 
             var messageIds = messages.Select(x => x.Id);
@@ -97,7 +97,7 @@ public class MessageCollectionService : IMessageCollectionService
             }
         }
         
-        Log.Info("Finish message collection");
+        Log.Info("Finished message collection");
         _messageCollectionTimer.Enabled = true;
     }
 }

@@ -8,6 +8,7 @@ public class LexerFactory : ILexerFactory
         return channelType switch
         {
             ChannelType.SellMapsChests => new MaptainsSellingFillingLexer(),
+            ChannelType.BuySellTradeables => new TradeablesLexer(),
             _ => throw new NotSupportedException()
         };
     }

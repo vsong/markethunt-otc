@@ -6,6 +6,7 @@ using MarkethuntOTC.Infrastructure;
 using MarkethuntOTC.Infrastructure.DataServices;
 using MarkethuntOTC.TextProcessing.Tokens;
 using MarkethuntOTC.Common.Extensions;
+using MarkethuntOTC.Domain.Roots.DiscordMessage;
 
 namespace MarkethuntOTC.TextProcessing.Parser;
 
@@ -27,20 +28,20 @@ public class Parser : IParser
         _parseRuleRepository = parseRuleRepository ?? throw new ArgumentNullException(nameof(parseRuleRepository));
     }
 
-    public ParseResult Parse(Token token)
+    public ParseResult Parse(Message message, Token token)
     {
         return token switch
         {
-            LeechToken t => ParseLeechToken(t),
+            LeechToken t => ParseLeechToken(message, t),
             FreshMapToken t => ParseResult.CreateUnsuccessful(),
             CompletedMapToken t => ParseResult.CreateUnsuccessful(),
-            TradeableToken t => ParseTradeableToken(t),
-            UnopenedMapToken t => ParseUnopenedMapToken(t),
+            TradeableToken t => ParseTradeableToken(message, t),
+            UnopenedMapToken t => ParseUnopenedMapToken(message, t),
             _ => throw new NotSupportedException()
         };
     }
 
-    private (ParseRule, Match) GetMatchingRule(Token token)
+    private (ParseRule, Match) GetMatchingRule(Message message, Token token)
     {
         using var db = _contextFactory.Create();
 
@@ -51,26 +52,30 @@ public class Parser : IParser
         ParseRule matchedRule = null;
         Match regexMatch = null;
 
-        foreach(var rule in rules)
+        foreach(var rule in rules.Where(x => RuleWithinDateRange(x, message)))
         {
-            var regex = rule.GetCompiledRegex();
-
-            var match = regex.Match(token.Text);
-
+            var match = rule.GetCompiledRegex().Match(token.Text);
             if (!match.Success) continue;
 
             matchedRule = rule;
             regexMatch = match;
-
             break;
         }
 
         return (matchedRule, regexMatch);
     }
 
-    private ParseResult ParseLeechToken(LeechToken leechToken)
+    private static bool RuleWithinDateRange(ParseRule parseRule, Message message)
     {
-        var (matchedRule, _) = GetMatchingRule(leechToken);
+        if (parseRule.StartDate.HasValue && parseRule.StartDate < message.CreatedOn) return false;
+        if (parseRule.EndDate.HasValue && parseRule.EndDate > message.CreatedOn) return false;
+
+        return true;
+    }
+
+    private ParseResult ParseLeechToken(Message message, LeechToken leechToken)
+    {
+        var (matchedRule, _) = GetMatchingRule(message, leechToken);
         if (matchedRule == null) return ParseResult.CreateUnsuccessful();
 
         if (!TryGetLeechSellPrice(leechToken.Text, out var price)) return ParseResult.CreateUnsuccessful();
@@ -78,9 +83,9 @@ public class Parser : IParser
         return ParseResult.CreateSuccessful(matchedRule, leechToken.GetListingType(), leechToken.IsSelling, price, null);
     }
     
-    private ParseResult ParseUnopenedMapToken(UnopenedMapToken unopenedMapToken)
+    private ParseResult ParseUnopenedMapToken(Message message, UnopenedMapToken unopenedMapToken)
     {
-        var (matchedRule, regexMatch) = GetMatchingRule(unopenedMapToken);
+        var (matchedRule, regexMatch) = GetMatchingRule(message, unopenedMapToken);
         if (matchedRule == null) return ParseResult.CreateUnsuccessful();
 
         if (!TryGetSimplePrice(unopenedMapToken.Text[regexMatch.Index..], out var price)) return ParseResult.CreateUnsuccessful();
@@ -88,9 +93,9 @@ public class Parser : IParser
         return ParseResult.CreateSuccessful(matchedRule, unopenedMapToken.GetListingType(), unopenedMapToken.IsSelling, price, null);
     }
     
-    private ParseResult ParseTradeableToken(TradeableToken tradeableToken)
+    private ParseResult ParseTradeableToken(Message message, TradeableToken tradeableToken)
     {
-        var (matchedRule, regexMatch) = GetMatchingRule(tradeableToken);
+        var (matchedRule, regexMatch) = GetMatchingRule(message, tradeableToken);
         if (matchedRule == null) return ParseResult.CreateUnsuccessful();
 
         if (!TryGetTradeablePrice(

@@ -74,22 +74,10 @@ public class MessageProcessingEventHandler : IMessageProcessingEventHandler
 
     private async Task ProcessMessages(IEnumerable<Message> messages, DomainContext db, CancellationToken cancellationToken)
     {
-        var listings =
-            (from results in _messageProcessor.ExtractListings(messages)
-            from parseResult in results.Results
-            select new Listing(
-                parseResult.MatchedParseRule.ItemId,
-                parseResult.SbPrice,
-                parseResult.ListingType,
-                parseResult.IsSelling,
-                parseResult.Amount,
-                results.Message.Id,
-                parseResult.MatchedParseRule.Id))
-            .ToList();
-        
-        if (!listings.Any()) return;
+        var results = _messageProcessor.ExtractListings(messages).SelectMany(x => x.Listings).ToList();
+        if (!results.Any()) return;
                 
-        await db.Listings.AddRangeAsync(listings, cancellationToken);
+        await db.Listings.AddRangeAsync(results, cancellationToken);
         await db.SaveChangesAsync(cancellationToken);
     }
 }

@@ -12,10 +12,10 @@ public class ItemMapping : IEntityTypeConfiguration<Item>
         builder.Property(x => x.Id).HasColumnName("item_id");
         builder.OwnsMany(x => x.DailyValues, ownedBuilder =>
         {
-            ownedBuilder.ToTable("daily_price");
+            ownedBuilder.ToTable("v_sb_prices");
             ownedBuilder.WithOwner().HasForeignKey("item_id");
             ownedBuilder.Property(x => x.Timestamp).HasColumnName("date");
-            ownedBuilder.Property(x => x.Value).HasColumnName("price");
+            ownedBuilder.Property(x => x.SbPrice).HasColumnName("sb_price");
         });
     }
 }

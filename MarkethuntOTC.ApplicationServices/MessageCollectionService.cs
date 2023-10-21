@@ -76,7 +76,7 @@ public class MessageCollectionService : IMessageCollectionService
                 .ToListAsync();
             var newMessagesToInsert =
                 (from m in messages
-                where !existingMessageIds.Contains(m.Id) 
+                where !existingMessageIds.Contains(m.Id) && !m.Author.IsBot
                 select Message.Create(m.Id, channelState.ChannelType, channelState.ChannelId, m.Content, m.Timestamp.DateTime))
                 .ToList();
             Log.Info($"Collected {newMessagesToInsert.Count} new messages");

@@ -67,10 +67,7 @@ public class Parser : IParser
 
     private static bool RuleWithinDateRange(ParseRule parseRule, Message message)
     {
-        if (parseRule.StartDate.HasValue && parseRule.StartDate < message.CreatedOn) return false;
-        if (parseRule.EndDate.HasValue && parseRule.EndDate > message.CreatedOn) return false;
-
-        return true;
+        return !(message.CreatedOn < parseRule.StartDate || message.CreatedOn > parseRule.EndDate);
     }
 
     private ParseResult ParseLeechToken(Message message, LeechToken leechToken)
@@ -110,7 +107,7 @@ public class Parser : IParser
         return ParseResult.CreateSuccessful(matchedRule, tradeableToken.GetListingType(), tradeableToken.IsSelling, price, amount);
     }
 
-    private bool TryGetLeechSellPrice(string s, out double price)
+    private static bool TryGetLeechSellPrice(string s, out double price)
     {
         price = default;
 

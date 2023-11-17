@@ -15,5 +15,6 @@ public class ListingMapping : IEntityTypeConfiguration<Listing>
         builder.Property(x => x.ListingType).HasColumnName("listing_type");
         builder.Property(x => x.MessageId).HasColumnName("message_id");
         builder.Property(x => x.ParseRuleId).HasColumnName("parse_rule_id");
+        builder.Property(x => x.Timestamp).HasColumnName("timestamp");
     }
 }

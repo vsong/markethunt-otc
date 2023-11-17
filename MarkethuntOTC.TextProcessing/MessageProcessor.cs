@@ -43,6 +43,7 @@ public class MessageProcessor : IMessageProcessor
         }
     }
 
+    // HACK throw away parsed trade listings that have "unreasonable" values based on daily MP price
     private Listing Postprocess(Message message, ParseResult parseResult)
     {
         double newSbPrice = parseResult.SbPrice;
@@ -69,7 +70,8 @@ public class MessageProcessor : IMessageProcessor
             parseResult.IsSelling,
             parseResult.Amount,
             message.Id,
-            parseResult.MatchedParseRule.Id);
+            parseResult.MatchedParseRule.Id,
+            message.CreatedOn);
     }
 
     private static bool SbPriceWithinRange(double expected, double actual)

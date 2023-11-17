@@ -2,7 +2,8 @@ namespace MarkethuntOTC.Domain.Roots.Listing;
 
 public class Listing : AggregateRoot<int>
 {
-    public Listing(int itemId, double sbPrice, ListingType listingType, bool isSelling, int? amount, ulong messageId, int parseRuleId)
+    public Listing(int itemId, double sbPrice, ListingType listingType, bool isSelling, int? amount,
+        ulong messageId, int parseRuleId, DateTime timestamp)
     {
         Id = default;
         ItemId = itemId;
@@ -12,6 +13,7 @@ public class Listing : AggregateRoot<int>
         Amount = amount;
         MessageId = messageId;
         ParseRuleId = parseRuleId;
+        Timestamp = timestamp;
     }
 
     public int ItemId { get; set; }
@@ -21,4 +23,5 @@ public class Listing : AggregateRoot<int>
     public int? Amount { get; set; }
     public ulong MessageId { get; set; }
     public int ParseRuleId { get; set; }
+    public DateTime Timestamp { get; set; }
 }

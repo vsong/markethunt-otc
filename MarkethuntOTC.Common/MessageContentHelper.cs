@@ -9,16 +9,16 @@ public static class MessageContentHelper
 
     public static string Sanitize(string content)
     {
-        return StripMentions(SanitizeEmojis(content));
+        return content == null ? null : StripMentions(SanitizeEmojis(content));
     }
     
     private static string SanitizeEmojis(string content)
     {
-        return content == null ? null : EmojiRegex.Replace(content, x => x.Groups["emoji"].Value);
+        return EmojiRegex.Replace(content, x => x.Groups["emoji"].Value);
     }
 
     private static string StripMentions(string content)
     {
-        return content == null ? null : MentionsRegex.Replace(content, "");
+        return MentionsRegex.Replace(content, "");
     }
 }

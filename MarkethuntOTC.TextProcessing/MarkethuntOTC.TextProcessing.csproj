@@ -14,13 +14,9 @@
     <ItemGroup>
       <ProjectReference Include="..\MarkethuntOTC.Domain\MarkethuntOTC.Domain.csproj" />
     </ItemGroup>
-
-
-
+    
     <ItemGroup>
-      <Reference Include="log4net">
-        <HintPath>..\..\..\.nuget\packages\log4net\2.0.15\lib\netstandard2.0\log4net.dll</HintPath>
-      </Reference>
+      <PackageReference Include="log4net" Version="2.0.15" />
     </ItemGroup>
 
 </Project>

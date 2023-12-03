@@ -32,4 +32,4 @@ container.GetInstance<IMessageCollectionService>();
 container.GetInstance<IAgentCommandService>();
 #endregion
 
-Console.ReadKey();
+Console.Read();

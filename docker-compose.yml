@@ -1,0 +1,11 @@
+services:
+  agent:
+    build: .
+    container_name: markethunt-otc-agent
+    volumes:
+      - ./MarkethuntOTC.Agent/appSettings.json:/app/appSettings.json
+    stdin_open: true
+    tty: true
+    restart: on-failure
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

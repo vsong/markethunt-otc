@@ -8,6 +8,7 @@ using MarkethuntOTC.Domain.Roots.DiscordMessage;
 using MarkethuntOTC.Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using ChannelType = MarkethuntOTC.Domain.Roots.DiscordMessage.ChannelType;
 using Timer = System.Timers.Timer;
 
 namespace MarkethuntOTC.ApplicationServices;
@@ -88,6 +89,8 @@ public class MessageCollectionService : IMessageCollectionService
             }
 
             await db.SaveChangesAsync();
+
+            if (channelState.ChannelType == ChannelType.BuySellSnipes) continue;
 
             if (newMessagesToInsert.Any())
             {

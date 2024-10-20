@@ -14,6 +14,11 @@ public class DomainContextFactory : IDomainContextFactory
     
     public DomainContext Create()
     {
-        return new DomainContext(_options);
+        var context = new DomainContext(_options);
+
+        // Test db connection. Will throw exception if connection fails.
+        context.Database.OpenConnection();
+        
+        return context;
     }
 }

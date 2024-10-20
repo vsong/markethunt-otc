@@ -1,10 +1,14 @@
 ﻿using Lamar;
+using log4net;
 using log4net.Config;
 using MarkethuntOTC.Agent;
 using MarkethuntOTC.ApplicationServices;
 using MarkethuntOTC.DataTransferObjects.Configuration;
-using MarkethuntOTC.Infrastructure.DataServices;
 using Microsoft.Extensions.Configuration;
+
+XmlConfigurator.Configure(new FileInfo("log4net.config"));
+var log = LogManager.GetLogger(typeof(Program));
+log.Info("Markethunt OTC Bot is starting");
 
 #region Config options setup
 var configuration = new ConfigurationBuilder()
@@ -20,8 +24,6 @@ var discordBotOptions = configuration
     .Get<DiscordBotOptions>(x => x.BindNonPublicProperties = true)!;
 #endregion
 
-XmlConfigurator.Configure(new FileInfo("log4net.config"));
-
 #region Container setup
 var registry = new ApplicationRegistry(databaseConnectionOptions, discordBotOptions);
 var container = new Container(registry);
@@ -32,4 +34,5 @@ container.GetInstance<IMessageCollectionService>();
 container.GetInstance<IAgentCommandService>();
 #endregion
 
+log.Info("Startup finished");
 Console.Read();

@@ -49,11 +49,13 @@ public class DiscordService : IDiscordService
     
     private async Task StartAsync(string token)
     {
+        Log.Info("Starting Discord client");
         // LoginAsync returns before actual login, so we have to wait for Ready event
         var readyTask = new TaskCompletionSource();
         
         var readyHandler = () =>
         {
+            Log.Info("Discord client ready");
             readyTask.SetResult();
             return Task.CompletedTask;
         };
@@ -71,6 +73,7 @@ public class DiscordService : IDiscordService
 
     public async Task StopAsync()
     {
+        Log.Info("Stopping Discord client");
         await _client.LogoutAsync();
         IsReady = false;
     }

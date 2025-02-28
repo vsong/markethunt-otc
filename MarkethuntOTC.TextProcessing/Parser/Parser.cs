@@ -43,8 +43,6 @@ public class Parser : IParser
 
     private (ParseRule, Match) GetMatchingRule(Message message, Token token)
     {
-        using var db = _contextFactory.Create();
-
         var itemCategories = token.GetItemCategories();
 
         var rules = _parseRuleRepository.Get(itemCategories).ToList();
